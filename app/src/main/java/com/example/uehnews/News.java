@@ -16,12 +16,6 @@ public class News {
     /** Section name of the article*/
     private String mSection;
 
-    /** Author name in the article */
-    private String mAuthor;
-
-    /** Web publication date of the article */
-    private String mDate;
-
     /** Website URL of the article */
     private String mUrl;
 
@@ -40,17 +34,13 @@ public class News {
      *
      * @param title is the title of the article
      * @param section is the section name of the article
-     * @param author is author name in article
-     * @param date is the web publication date of the article
      * @param url is the website URL to find more details about the article
      * @param thumbnail is the thumbnail of the article
      * @param description is trail text of the article with string type Html
      */
-    public News(String title, String section, String author, String date, String url, String thumbnail, String description) {
+    public News(String title, String section, String url, String thumbnail, String description) {
         this.mTitle = title;
         this.mSection = section;
-        this.mAuthor = author;
-        this.mDate = date;
         this.mUrl = url;
         this.mThumbnail = thumbnail;
         this.mdescription = description;
@@ -68,19 +58,6 @@ public class News {
      */
     public String getSection() {
         return mSection;
-    }
-
-    /**
-     * Returns the author name of the article.
-     */
-    public String getAuthor() {
-        return mAuthor;
-    }
-    /**
-     * Returns the web publication date of the article.
-     */
-    public String getDate() {
-        return mDate;
     }
 
     /**
@@ -111,14 +88,6 @@ public class News {
 
     public void setSection(String mSection) {
         this.mSection = mSection;
-    }
-
-    public void setmAuthor(String mAuthor) {
-        this.mAuthor = mAuthor;
-    }
-
-    public void setmDate(String mDate) {
-        this.mDate = mDate;
     }
 
     public void setmUrl(String mUrl) {

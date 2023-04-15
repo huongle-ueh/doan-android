@@ -36,21 +36,14 @@ public class SettingsActivity extends AppCompatActivity {
     /**
      * The NewsPreferenceFragment implements the Preference.OnPreferenceChangeListener interface
      * to set up to listen for any Preference changes made by the user.
-     * And the NewsPreferenceFragment also implements the DatePickerDialog.OnDateSetListener to
-     * receive a callback when the user has finished selecting a date.
      */
     public static class NewsPreferenceFragment extends PreferenceFragment
-            implements Preference.OnPreferenceChangeListener, DatePickerDialog.OnDateSetListener {
+            implements Preference.OnPreferenceChangeListener {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
-
-            // Find the preference for number of items
-            Preference numOfItems = findPreference(getString(R.string.settings_number_of_items_key));
-            // bind the current preference value to be displayed
-            bindPreferenceSummaryToValue(numOfItems);
 
             // Find the "color theme" Preference object according to its key
             Preference colorTheme = findPreference(getString(R.string.settings_color_key));
@@ -63,56 +56,10 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreferenceSummaryToValue(textSize);
         }
 
-        /**
-         * This method is called when the user has clicked a Preference.
-         */
-        private void setOnPreferenceClick(Preference preference) {
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    String key = preference.getKey();
-                    if (key.equalsIgnoreCase(getString(R.string.settings_from_date_key))) {
-                        showDatePicker();
-                    }
-                    return false;
-                }
-            });
-        }
-
-        /**
-         * Show the current date as the default date in the picker
-         */
-        private void showDatePicker() {
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            new DatePickerDialog(getActivity(),
-                   this, year, month, dayOfMonth).show();
-        }
-
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            // Since it starts counting the months from 0, add one to the month value.
-            month = month + 1;
-            // Date the user selected
-            String selectedDate = year + "-" + month + "-" + dayOfMonth;
-            // Convert selected date string(i.e. "2017-2-1" into formatted date string(i.e. "2017-02-01")
-            String formattedDate = formatDate(selectedDate);
-
-            // Storing selected date
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(getString(R.string.settings_from_date_key), formattedDate).apply();
-
-            // Update the displayed preference summary after it has been changed
-            Preference fromDatePreference = findPreference(getString(R.string.settings_from_date_key));
-            bindPreferenceSummaryToValue(fromDatePreference);
-        }
 
         /**
          * This method is called when the user has changed a Preference.
-         * Update the displayed preference summary (the UI) after it has been changed.
+         * Update the displayed preference summary after it has been changed.
          * @param preference the changed Preference
          * @param value the new value of the Preference
          * @return True to update the state of the Preference with the new value
@@ -149,24 +96,6 @@ public class SettingsActivity extends AppCompatActivity {
                     PreferenceManager.getDefaultSharedPreferences(preference.getContext());
             String preferenceString = preferences.getString(preference.getKey(), "");
             onPreferenceChange(preference, preferenceString);
-        }
-
-        /**
-         * Convert selected date string(i.e. "2017-2-1" into formatted date string(i.e. "2017-02-01")
-         *
-         * @param dateString is the selected date from the DatePicker
-         * @return the formatted date string
-         */
-        private String formatDate(String dateString) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-M-d");
-            Date dateObject = null;
-            try {
-                dateObject = simpleDateFormat.parse(dateString);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");
-            return df.format(dateObject);
         }
     }
 
